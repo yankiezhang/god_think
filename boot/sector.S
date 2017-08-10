@@ -1,14 +1,16 @@
 #include <sector.h>
 
-.set bit_cr0_pe_on,	BIT_CR0_PE_ON
+.set bit_cr0_pe_on,		BIT_CR0_PE_ON
 
-.set word_boot_seg,	WORD_BOOT_SEG
-.set word_boot_ssize,	WORD_BOOT_SSIZE /*stack size*/
-.set word_boot_label,	WORD_BOOT_LABEL
-.set word_sel_gdt_code, WORD_SEL_GDT_CODE
+.set word_boot_seg,		WORD_BOOT_SEG
+.set word_boot_ssize,		WORD_BOOT_SSIZE /*stack size*/
+.set word_boot_label,		WORD_BOOT_LABEL
+.set word_sel_gdt_code, 	WORD_SEL_GDT_CODE
+.set word_sel_gdt_video,	WORD_SEL_GDT_VIDEO
 
-.set quad_gdt_null,	QUAD_GDT_NULL
-.set quad_gdt_code,	QUAD_GDT_CODE
+.set quad_gdt_null,		QUAD_GDT_NULL
+.set quad_gdt_code,		QUAD_GDT_CODE
+.set quad_gdt_video,		QUAD_GDT_VIDEO
 
 .code16
 .section .text
@@ -20,6 +22,7 @@ _start:
 _gdt:
 	.quad	QUAD_GDT_NULL
 	.quad	QUAD_GDT_CODE
+	.quad	QUAD_GDT_VIDEO
 
 _gdt_desc:
 	.word	_gdt_desc - _gdt - 1
@@ -39,10 +42,6 @@ _entry:
 
 
 	call	_cls /* clear the screen */
-
-	pushw	$_len
-	pushw	$_msg
-	call	_print
 
 	//NOTE:  load the GDT and enable cr0 for 32 bit
 	cli
@@ -81,6 +80,18 @@ _cls:
 
 .code32
 _start32:
+	movw	%cs,	%ax
+	movw	%ax,	%ds
+	movw	%ax,	%es
+	movw	%ax,	%fs
+
+	xorl	%eax,	%eax
+	movw	$0x010,	%ax
+	movw	%ax,	%gs
+	movl	$(80 * 11 + 11) * 2,	%edi
+	movb	$0x0C,	%ah
+	movb	$'A',	%al
+	movw	%ax,	%gs:(%edi)
 	jmp	.
 
 _msg:

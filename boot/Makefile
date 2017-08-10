@@ -20,7 +20,8 @@ IMG=$(wildcard *.img)
 	${LD} ${LD_FLAGS} $< -o $@
 
 all: sector.img
-	${QEMU} -hda $<	
+	#${QEMU} -hda $<	
+	dd if=$< of=a.img bs=512 count=1 conv=notrunc
 
 clean:
 	-rm -rf ${OBJ} ${BIN} ${IMG}
