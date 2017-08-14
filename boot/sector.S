@@ -1,28 +1,17 @@
 #include <sector.h>
 
-.set bit_cr0_pe_on,		BIT_CR0_PE_ON
-
-.set word_boot_seg,		WORD_BOOT_SEG
-.set word_boot_ssize,		WORD_BOOT_SSIZE /*stack size*/
-.set word_boot_label,		WORD_BOOT_LABEL
-.set word_sel_gdt_code, 	WORD_SEL_GDT_CODE
-.set word_sel_gdt_video,	WORD_SEL_GDT_VIDEO
-
-.set quad_gdt_null,		QUAD_GDT_NULL
-.set quad_gdt_code,		QUAD_GDT_CODE
-.set quad_gdt_video,		QUAD_GDT_VIDEO
-
 .code16
 .section .text
 
 _start:
-	ljmp	$word_boot_seg, $_entry
+	ljmp	$WORD_BOOT_SEG, $_entry
 
 .p2align 2
 _gdt:
 	.quad	QUAD_GDT_NULL
 	.quad	QUAD_GDT_CODE
 	.quad	QUAD_GDT_VIDEO
+	.quad	QUAD_GDT_DATA
 
 _gdt_desc:
 	.word	_gdt_desc - _gdt - 1
@@ -36,7 +25,7 @@ _entry:
 	movw	%ax,	%gs
 
 	//NOTE: set the stack size for the boot
-	movw	$word_boot_ssize, %ax
+	movw	$WORD_BOOT_SSIZE, %ax
 	movw	%ax,	%sp
 	movw	%sp,	%bp
 
@@ -47,9 +36,9 @@ _entry:
 	cli
 	lgdt	_gdt_desc
 	movl	%cr0,	%eax
-	orl	$bit_cr0_pe_on,	%eax
+	orl	$BIT_CR0_PE_ON,	%eax
 	movl	%eax, %cr0
-	ljmp	$word_sel_gdt_code, $_start32
+	ljmp	$WORD_SEL_GDT_CODE, $_start32
 
 	//NOTE: arg0 is the length, arg1 is the address
 _print:
@@ -81,17 +70,18 @@ _cls:
 .code32
 _start32:
 	movw	%cs,	%ax
-	movw	%ax,	%ds
 	movw	%ax,	%es
 	movw	%ax,	%fs
 
-	xorl	%eax,	%eax
-	movw	$0x010,	%ax
-	movw	%ax,	%gs
-	movl	$(80 * 11 + 11) * 2,	%edi
-	movb	$0x0C,	%ah
-	movb	$'A',	%al
-	movw	%ax,	%gs:(%edi)
+	movw	$WORD_SEL_GDT_DATA, %ax
+	movw	%ax,	%ds
+	movw	%ax,	%ss
+
+	movl	$WORD_BOOT_SSIZE, %eax
+	movl	%eax,	%esp
+	movl	%esp,	%ebp
+
+	call	kernel
 	jmp	.
 
 _msg:
@@ -103,4 +93,4 @@ _msg_tt:
 	.equ	_len_tt, . - _msg_tt
 
 .section .label
-	.word	word_boot_label
+	.word	WORD_BOOT_LABEL
