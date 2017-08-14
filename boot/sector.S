@@ -102,5 +102,5 @@ _msg_tt:
 	.ascii	"TTTTTTTTTTTTTTTtt\r\n"
 	.equ	_len_tt, . - _msg_tt
 
-	.org 510
+.section .label
 	.word	word_boot_label
