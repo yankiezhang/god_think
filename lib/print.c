@@ -12,7 +12,7 @@ putchar(const char c)
 	"movw %%ax, %%gs\n\t"
 	"movl %0, %%edi\n\t"
 	"movb $0x0C, %%ah\n\t"
-	"movb $'A', %%al\n\t"
+	"movb %1, %%al\n\t"
 	"movw %%ax, %%gs:(%%edi)\n\t"
-	::"r"(pos):"ax","di");
+	::"r"(pos), "r"(c):"ax","di");
 }

@@ -26,7 +26,7 @@ ${IMG_TARGET}: ${OBJ}
 	${LD} ${LD_FLAGS} --oformat binary $^ ${LIB} -o $@
 
 all: ${IMG_TARGET}
-	dd if=$< of=a.img bs=512 count=1 conv=notrunc
+	dd if=$< of=c.img bs=512 count=1 conv=notrunc
 
 check:
 	@echo ${SRC}

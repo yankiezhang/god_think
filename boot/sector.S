@@ -69,13 +69,10 @@ _cls:
 
 .code32
 _start32:
-	movw	%cs,	%ax
-	movw	%ax,	%es
-	movw	%ax,	%fs
-
 	movw	$WORD_SEL_GDT_DATA, %ax
 	movw	%ax,	%ds
 	movw	%ax,	%ss
+	movw	%ax,	%es
 
 	movl	$WORD_BOOT_SSIZE, %eax
 	movl	%eax,	%esp

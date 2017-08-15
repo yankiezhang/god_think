@@ -5,7 +5,7 @@ OBJ=$(patsubst %.c,%.o,${SRC})
 
 INCLUDE=-I../include
 
-GCC_FLAGS=-fno-builtin -Wall -ggdb -m32 -gstabs -nostdinc  -fno-stack-protector ${INCLUDE} -Os -nostdinc -c
+GCC_FLAGS=-fno-builtin -Wall -ggdb -m32 -gstabs -nostdinc  -fno-stack-protector ${INCLUDE} -Os -nostdinc
 
 %.o: %.c
 	${GCC} ${GCC_FLAGS} -c $< -o $@
