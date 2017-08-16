@@ -33,5 +33,6 @@ check:
 	@echo ${OBJ}
 
 clean:
-	-rm -rf ${OBJ} ${BIN} ${IMG}
+	rm sector.img
+	-rm -rf ${OBJ} ${BIN} 
 

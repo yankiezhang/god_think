@@ -14,7 +14,7 @@
 #define HD_COMMAND	0x01F7
 #define HD_CMD		0x03F6
 
-#define CMD_HD_READ	0x020
+#define CMD_HD_READ	0x20
 
 void inline readsect(void *dst, u32 secno);
 

@@ -1,17 +1,27 @@
 #include <x86.h>
 #include <io.h>
 
+static void
+waitdisk(void) {
+    while ((inb(0x1F7) & 0xC0) != 0x40)
+        /* do nothing */;
+}
+
 void
 readsect(void *dst, u32 secno) {
 
-	u8 cnt = 1; /* read sector size */
+	const int cnt = 1;
 
-	outb(HD_DATA, cnt);	
-	outb(HD_SECTOR, (u8)(secno&0x0FF));
-	outb(HD_LCYL, (secno>>8)&0x0FF);
-	outb(HD_HCYL, (secno>>16)&0x0FF);
-	outb(HD_CURRENT, ((secno>>25)&0x0F)|0x0E0);
+	waitdisk();
+
+	outb(HD_NSECTOR, cnt);	
+	outb(HD_SECTOR, secno & 0xFF);
+	outb(HD_LCYL, (secno>>8) & 0xFF);
+	outb(HD_HCYL, (secno>>16) & 0xFF);
+	outb(HD_CURRENT, ((secno>>24) & 0xF) | 0xE0);
 	outb(HD_COMMAND, CMD_HD_READ);
 
-	insl(HD_DATA, dst, cnt<<9);
+	waitdisk(); //NOTE: must wait, otherwise the data would be zero
+
+	insl(HD_DATA, dst, 1<<7);
 }
