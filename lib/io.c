@@ -7,11 +7,10 @@ waitdisk(void) {
         /* do nothing */;
 }
 
-/*
- * Summary: 	read the sector to the dst
- * Parameters:
- *	dst: the target address
- *	secno: the sector number from zero
+/**
+ * @brief	read the sector to the target offset
+ * @param [in]	target offset
+ * @param [in]	the sector number from zero
  */
 void
 readsect(void *dst, u32 secno) {
