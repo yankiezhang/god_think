@@ -7,6 +7,12 @@ waitdisk(void) {
         /* do nothing */;
 }
 
+/*
+ * Summary: 	read the sector to the dst
+ * Parameters:
+ *	dst: the target address
+ *	secno: the sector number from zero
+ */
 void
 readsect(void *dst, u32 secno) {
 
@@ -16,9 +22,9 @@ readsect(void *dst, u32 secno) {
 
 	outb(HD_NSECTOR, cnt);	
 	outb(HD_SECTOR, secno & 0xFF);
-	outb(HD_LCYL, (secno>>8) & 0xFF);
-	outb(HD_HCYL, (secno>>16) & 0xFF);
-	outb(HD_CURRENT, ((secno>>24) & 0xF) | 0xE0);
+	outb(HD_LCYL, secno>>8 & 0xFF);
+	outb(HD_HCYL, secno>>16 & 0xFF);
+	outb(HD_CURRENT, (secno>>24 & 0xF) | 0xE0);
 	outb(HD_COMMAND, CMD_HD_READ);
 
 	waitdisk(); //NOTE: must wait, otherwise the data would be zero

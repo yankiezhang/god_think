@@ -6,7 +6,7 @@
 int kernel(void) 
 {
 	putchar('C');
-	readsect((void*)0x0, 1);
+	readsect((void*)0x400, 1);
 	return ERR_NONE;
 }
 
