@@ -2,11 +2,12 @@
 #include <error.h>
 #include <print.h>
 #include <io.h>
+#include <sector.h>
 
 int kernel(void) 
 {
 	putchar('C');
-	readsect((void*)0x400, 1);
+	readsect((void*)WORD_OFFSET_GOD, 1);
 	return ERR_NONE;
 }
 
