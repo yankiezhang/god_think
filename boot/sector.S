@@ -12,6 +12,7 @@ _gdt:
 	.quad	QUAD_GDT_CODE
 	.quad	QUAD_GDT_VIDEO
 	.quad	QUAD_GDT_DATA
+	.quad	QUAD_GDT_GOD_DATA
 
 _gdt_desc:
 	.word	_gdt_desc - _gdt - 1
