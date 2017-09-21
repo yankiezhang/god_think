@@ -1,3 +1,4 @@
+.PHONY: all
 IMG_TARGET=god.img
 SRC=$(wildcard *.S)
 SRC+=$(wildcard *.c)

@@ -1,3 +1,5 @@
+.PHONY: all
+
 IMG_TARGET=sector.img
 SRC=$(wildcard *.S)
 SRC+=$(wildcard *.c)
@@ -33,6 +35,6 @@ check:
 	@echo ${OBJ}
 
 clean:
-	rm sector.img
+	-rm -rf ${IMG_TARGET}
 	-rm -rf ${OBJ} ${BIN} 
 

@@ -13,6 +13,7 @@ _gdt:
 	.quad	QUAD_GDT_VIDEO
 	.quad	QUAD_GDT_DATA
 	.quad	QUAD_GDT_GOD_DATA
+	.quad	QUAD_GDT_GOD_CODE
 
 _gdt_desc:
 	.word	_gdt_desc - _gdt - 1
@@ -80,7 +81,7 @@ _start32:
 	movl	%esp,	%ebp
 
 	call	kernel
-	jmp	.
+	ljmp	$WORD_SEL_GDT_GOD_CODE, $0
 
 _msg:
 	.ascii	"Hello, world\r\n"
